@@ -4,23 +4,33 @@
     <button @click="fetchStations" class="fetch-button">
       Fetch Stations
     </button>
-    <div v-if="stations.length > 0" class="stations-list">
-      <div v-for="station in stations" :key="station.id" class="station-item">
+    <div>Debug: {{ stationsData }}</div>
+    <div v-if="stationsData?.stations && stationsData.stations.length > 0" class="stations-list">
+      <div v-for="station in stationsData.stations" :key="station.id" class="station-item">
         <h3>{{ station.name }}</h3>
-        <p>Location: {{ station.location }}</p>
+        <p><strong>Location:</strong> {{ station.location }}</p>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-const stations = ref([])
+<script setup lang="ts">
+interface StationResponse {
+  stations: Array<{
+    id: string;
+    name: string;
+    location: string;
+  }>;
+}
+
+const stationsData = ref<StationResponse | null>(null)
 
 async function fetchStations() {
   try {
     const response = await fetch('/api/stations')
     const data = await response.json()
-    stations.value = data.stations
+    stationsData.value = data
+    console.log('Fetched stations:', stationsData.value)
   } catch (error) {
     console.error('Error fetching stations:', error)
   }
@@ -29,7 +39,7 @@ async function fetchStations() {
 
 <style scoped>
 .container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -59,24 +69,31 @@ h1 {
 }
 
 .stations-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
   margin-top: 20px;
 }
 
 .station-item {
   background-color: #f9f9f9;
   border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 10px;
+  padding: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .station-item h3 {
-  margin: 0 0 10px 0;
+  margin: 0 0 15px 0;
   color: #333;
+  font-size: 1.4em;
 }
 
 .station-item p {
-  margin: 0;
+  margin: 5px 0;
   color: #666;
+}
+
+.station-item strong {
+  color: #333;
 }
 </style> 
