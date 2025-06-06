@@ -6,12 +6,14 @@ export interface Booking {
   endDate: string;
 }
 
+// External station type from the API
 export interface ExternalStation {
   id: string;
   name: string;
   bookings: Booking[];
 }
 
+// Internal station type for the application
 export interface Station {
   id: string;
   name: string;
