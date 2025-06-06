@@ -4,11 +4,17 @@
     <button @click="fetchStations" class="fetch-button">
       Fetch Stations
     </button>
-    <div>Debug: {{ stationsData }}</div>
     <div v-if="stationsData?.stations && stationsData.stations.length > 0" class="stations-list">
       <div v-for="station in stationsData.stations" :key="station.id" class="station-item">
         <h3>{{ station.name }}</h3>
         <p><strong>Location:</strong> {{ station.location }}</p>
+        <p><strong>Total Bookings:</strong> {{ station.bookingsCount }}</p>
+        <div v-if="station.bookings.length > 0" class="latest-booking">
+          <h4>Latest Booking:</h4>
+          <p><strong>Customer:</strong> {{ station.bookings[0].customerName }}</p>
+          <p><strong>Start Date:</strong> {{ formatDate(station.bookings[0].startDate) }}</p>
+          <p><strong>End Date:</strong> {{ formatDate(station.bookings[0].endDate) }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -16,18 +22,28 @@
 
 <script setup lang="ts">
 import { useConfig } from '../composables/useConfig'
+import type { Booking } from '~/types/station'
 
 interface StationResponse {
   stations: Array<{
     id: string;
     name: string;
     location: string;
+    bookings: Booking[];
+    bookingsCount: number;
   }>;
 }
-
 const { getInternalApiUrl } = useConfig()
 const apiUrls = getInternalApiUrl()
 const stationsData = ref<StationResponse | null>(null)
+
+function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+}
 
 async function fetchStations() {
   try {
@@ -99,5 +115,17 @@ h1 {
 
 .station-item strong {
   color: #333;
+}
+
+.latest-booking {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.latest-booking h4 {
+  color: #333;
+  margin: 0 0 10px 0;
+  font-size: 1.1em;
 }
 </style> 

@@ -14,7 +14,9 @@ export default defineEventHandler(async (event) => {
         .map((station): Station => ({
           id: station.id,
           name: station.name,
-          location: station.name
+          location: station.name,
+          bookings: station.bookings,
+          bookingsCount: station.bookings.length
         }))
     }
   } catch (error) {

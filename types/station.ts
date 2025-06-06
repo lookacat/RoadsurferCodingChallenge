@@ -16,4 +16,6 @@ export interface Station {
   id: string;
   name: string;
   location: string;
+  bookings: Booking[];
+  bookingsCount: number;
 } 
