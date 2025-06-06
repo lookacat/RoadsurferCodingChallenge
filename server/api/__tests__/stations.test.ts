@@ -1,10 +1,12 @@
 import { describe, expect, test, jest, beforeEach } from '@jest/globals'
 import type { ExternalStation, Station } from '~/types/station'
+import { API_CONFIG } from '~/config/api'
 
 // Mock the handler
 const mockHandler = async () => {
   try {
-    const response = await fetch('https://605c94c36d85de00170da8b4.mockapi.io/stations')
+    const stationsUrl = `${API_CONFIG.stations.baseUrl}${API_CONFIG.stations.endpoints.list}`
+    const response = await fetch(stationsUrl)
     const stations: ExternalStation[] = await response.json()
     
     return {
@@ -42,7 +44,7 @@ describe('Stations API Handler', () => {
     const response = await mockHandler()
     
     expect(global.fetch).toHaveBeenCalledWith(
-      'https://605c94c36d85de00170da8b4.mockapi.io/stations'
+      `${API_CONFIG.stations.baseUrl}${API_CONFIG.stations.endpoints.list}`
     )
     
     expect(response).toEqual({
