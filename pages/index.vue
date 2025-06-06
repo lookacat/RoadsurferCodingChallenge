@@ -15,6 +15,8 @@
 </template>
 
 <script setup lang="ts">
+import { useConfig } from '../composables/useConfig'
+
 interface StationResponse {
   stations: Array<{
     id: string;
@@ -23,11 +25,13 @@ interface StationResponse {
   }>;
 }
 
+const { getInternalApiUrl } = useConfig()
+const apiUrls = getInternalApiUrl()
 const stationsData = ref<StationResponse | null>(null)
 
 async function fetchStations() {
   try {
-    const response = await fetch('/api/stations')
+    const response = await fetch(apiUrls.stations)
     const data = await response.json()
     stationsData.value = data
     console.log('Fetched stations:', stationsData.value)
