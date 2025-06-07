@@ -111,7 +111,7 @@
                     <div v-if="day.bookings.length > 0" class="bookings-list">
                       <v-chip
                         v-for="booking in day.bookings.slice(0, isMobile ? 5 : 2)"
-                        :key="booking.id"
+                        :key="`${booking.id}-${booking.eventType}`"
                         size="large"
                         :color="getBookingChipColor(booking, day.date)"
                         variant="tonal"
@@ -122,7 +122,7 @@
                           size="x-small"
                           class="mr-1"
                         ></v-icon>
-                        {{ booking.customerName }} {{ isBookingStarting(booking, day.date) ? 'started' : 'ended' }}
+                        {{ booking.displayText }}
                       </v-chip>
                       
                       <v-chip
@@ -236,31 +236,46 @@ const weekDays = computed(() => {
     const date = new Date(weekStart)
     date.setDate(weekStart.getDate() + i)
     
-    const dayBookings = getBookingsForDate(date)
+    const dayEvents = getBookingEventsForDate(date)
     
     days.push({
       date: new Date(date),
       dayName: date.toLocaleDateString('en-US', { weekday: 'short' }),
       dayNumber: date.getDate(),
-      bookings: dayBookings
+      bookings: dayEvents
     })
   }
   
   return days
 })
 
-function getBookingsForDate(date: Date) {
+function getBookingEventsForDate(date: Date) {
   if (!stationsStore.selectedStation?.bookings) return []
   
-  return stationsStore.selectedStation.bookings.filter(booking => {
+  const events: any[] = []
+  
+  stationsStore.selectedStation.bookings.forEach(booking => {
     const startDate = new Date(booking.startDate)
     const endDate = new Date(booking.endDate)
     
-    const isStartDate = date.toDateString() === startDate.toDateString()
-    const isEndDate = date.toDateString() === endDate.toDateString()
+    if (date.toDateString() === startDate.toDateString()) {
+      events.push({
+        ...booking,
+        eventType: 'start',
+        displayText: `${booking.customerName} started`
+      })
+    }
     
-    return isStartDate || isEndDate
+    if (date.toDateString() === endDate.toDateString()) {
+      events.push({
+        ...booking,
+        eventType: 'end',
+        displayText: `${booking.customerName} ended`
+      })
+    }
   })
+  
+  return events
 }
 
 function isToday(date: Date): boolean {
@@ -286,12 +301,9 @@ function formatWeekRange(weekStart: Date): string {
 }
 
 function getBookingChipColor(booking: any, date: Date): string {
-  const startDate = new Date(booking.startDate)
-  const endDate = new Date(booking.endDate)
-  
-  if (date.toDateString() === startDate.toDateString()) {
+  if (booking.eventType === 'start') {
     return 'primary'
-  } else if (date.toDateString() === endDate.toDateString()) {
+  } else if (booking.eventType === 'end') {
     return 'success'
   } else {
     return 'info'
@@ -311,9 +323,9 @@ function isBookingStarting(booking: any, date: Date): boolean {
 }
 
 function getBookingIcon(booking: any, date: Date): string {
-  if (isBookingStarting(booking, date)) {
+  if (booking.eventType === 'start') {
     return 'mdi-circle-outline'
-  } else if (isBookingEnding(booking, date)) {
+  } else if (booking.eventType === 'end') {
     return 'mdi-circle-slice-8'
   } else {
     return 'mdi-circle-outline'
