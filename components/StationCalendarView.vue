@@ -2,165 +2,25 @@
   <v-container>
     <div v-if="stationsStore.selectedStation">
       <v-card>
-        <v-card-title class="d-flex align-center">
-          <v-icon class="mr-2">mdi-calendar</v-icon>
-          {{ stationsStore.selectedStation.name }} - Calendar View
-        </v-card-title>
-        <v-card-subtitle>
-          <v-chip color="primary" variant="tonal" class="mr-2">
-            <v-icon start>mdi-map-marker-outline</v-icon>
-            {{ stationsStore.selectedStation.location }}
-          </v-chip>
-          <v-chip color="success" variant="tonal">
-            <v-icon start>mdi-calendar-check</v-icon>
-            {{ stationsStore.selectedStation.bookingsCount }} bookings
-          </v-chip>
-        </v-card-subtitle>
-        
+        <CalendarHeader :station="stationsStore.selectedStation" />
         <v-card-text>
-          <div class="navigation-container mb-4">
-            <!-- Year Selection -->
-            <div class="year-navigation d-flex justify-center align-center mb-3">
-              <v-btn
-                @click="previousYear"
-                variant="text"
-                size="small"
-                :disabled="stationsStore.loading"
-              >
-                <v-icon>mdi-chevron-left</v-icon>
-              </v-btn>
-              
-              <v-select
-                v-model="currentYear"
-                :items="availableYears"
-                variant="outlined"
-                density="compact"
-                hide-details
-                style="width: 120px; margin: 0 8px;"
-                :disabled="stationsStore.loading"
-              ></v-select>
-              
-              <v-btn
-                @click="nextYear"
-                variant="text"
-                size="small"
-                :disabled="stationsStore.loading"
-              >
-                <v-icon>mdi-chevron-right</v-icon>
-              </v-btn>
-            </div>
-            
-            <!-- Week Selection Dropdown -->
-            <div class="week-selector d-flex justify-center mb-3">
-              <v-select
-                v-model="selectedWeekOption"
-                :items="weekOptions"
-                item-title="label"
-                item-value="value"
-                variant="outlined"
-                density="compact"
-                hide-details
-                label="Select Week"
-                style="width: 300px;"
-                :disabled="stationsStore.loading"
-                @update:model-value="onWeekSelect"
-              ></v-select>
-            </div>
-            
-            <!-- Week Navigation -->
-            <div class="week-navigation d-flex justify-space-between align-center">
-              <v-btn
-                @click="previousWeek"
-                variant="outlined"
-                size="small"
-                :disabled="stationsStore.loading"
-              >
-                <v-icon start>mdi-chevron-left</v-icon>
-                Previous
-              </v-btn>
-              
-              <div class="text-h6 text-center">
-                {{ formatWeekRange(currentWeekStart) }}
-              </div>
-              
-              <v-btn
-                @click="nextWeek"
-                variant="outlined"
-                size="small"
-                :disabled="stationsStore.loading"
-              >
-                Next
-                <v-icon end>mdi-chevron-right</v-icon>
-              </v-btn>
-            </div>
-          </div>
-          
-          <!-- Week Calendar Grid -->
-          <div class="calendar-grid">
-            <v-row no-gutters>
-              <v-col
-                v-for="(day, index) in weekDays"
-                :key="index"
-                :cols="isMobile ? '12' : undefined"
-                :class="isMobile ? 'mb-2' : 'calendar-day-col'"
-              >
-                <v-card
-                  variant="outlined"
-                  :class="[
-                    'calendar-day-card',
-                    { 'today': isToday(day.date) },
-                    { 'has-bookings': day.bookings.length > 0 }
-                  ]"
-                  :height="isMobile ? 'auto' : '120'"
-                >
-                  <v-card-title class="pa-2 text-center">
-                    <div class="day-header">
-                      <div class="day-name text-caption text-medium-emphasis">
-                        {{ day.dayName }}
-                      </div>
-                      <div class="day-number text-h6" :class="{ 'text-primary': isToday(day.date) }">
-                        {{ day.dayNumber }}
-                      </div>
-                    </div>
-                  </v-card-title>
-                  
-                  <v-card-text class="pa-2" style="min-height: 60px;">
-                    <div v-if="day.bookings.length > 0" class="bookings-list">
-                      <v-chip
-                        v-for="booking in day.bookings.slice(0, isMobile ? 5 : 2)"
-                        :key="`${booking.id}-${booking.eventType}`"
-                        size="large"
-                        :color="getBookingChipColor(booking, day.date)"
-                        variant="tonal"
-                        class="mb-1 mr-1 booking-chip"
-                      >
-                        <v-icon 
-                          :icon="getBookingIcon(booking, day.date)"
-                          size="x-small"
-                          class="mr-1"
-                        ></v-icon>
-                        {{ booking.displayText }}
-                      </v-chip>
-                      
-                      <v-chip
-                        v-if="day.bookings.length > (isMobile ? 5 : 2)"
-                        size="x-small"
-                        color="info"
-                        variant="outlined"
-                        class="mb-1"
-                      >
-                        +{{ day.bookings.length - (isMobile ? 5 : 2) }} more
-                      </v-chip>
-                    </div>
-                    
-                    <div v-else class="text-center text-caption text-medium-emphasis">
-                      No bookings
-                    </div>
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
-          </div>
+          <CalendarNavigation
+            v-model:current-year="currentYear"
+            :available-years="availableYears"
+            :selected-week-option="selectedWeekOption"
+            :week-options="weekOptions"
+            :week-range-text="formatWeekRange(currentWeekStart)"
+            :loading="stationsStore.loading"
+            @previous-year="previousYear"
+            @next-year="nextYear"
+            @previous-week="previousWeek"
+            @next-week="nextWeek"
+            @week-select="onWeekSelect"
+          />
+          <CalendarGrid 
+            :week-days="weekDays"
+            :is-mobile="isMobile"
+          />
         </v-card-text>
       </v-card>
     </div>
@@ -187,6 +47,9 @@
 
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
+import CalendarHeader from './calendar/CalendarHeader.vue'
+import CalendarNavigation from './calendar/CalendarNavigation.vue'
+import CalendarGrid from './calendar/CalendarGrid.vue'
 
 const stationsStore = useStationsStore()
 const { mobile } = useDisplay()
@@ -195,6 +58,7 @@ const isMobile = computed(() => mobile.value)
 const currentWeekStart = ref(getStartOfWeek(new Date()))
 const currentYear = ref(new Date().getFullYear())
 const selectedWeekOption = ref<string>('')
+
 const availableYears = computed(() => {
   const currentYearValue = new Date().getFullYear()
   const years = []
@@ -371,11 +235,6 @@ function getBookingEventsForDate(date: Date) {
   return events
 }
 
-function isToday(date: Date): boolean {
-  const today = new Date()
-  return date.toDateString() === today.toDateString()
-}
-
 function formatWeekRange(weekStart: Date): string {
   const weekEnd = new Date(weekStart)
   weekEnd.setDate(weekStart.getDate() + 6)
@@ -392,118 +251,4 @@ function formatWeekRange(weekStart: Date): string {
     return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${year}`
   }
 }
-
-function getBookingChipColor(booking: any, date: Date): string {
-  if (booking.eventType === 'start') {
-    return 'primary'
-  } else if (booking.eventType === 'end') {
-    return 'success'
-  } else {
-    return 'info'
-  }
-}
-
-function isBookingEnding(booking: any, date: Date): boolean {
-	const startDate = new Date(booking.startDate)
-	const endDate = new Date(booking.endDate)
-
-	return date.toDateString() === endDate.toDateString()
-}
-
-function isBookingStarting(booking: any, date: Date): boolean {
-	const startDate = new Date(booking.startDate)
-	return date.toDateString() === startDate.toDateString()
-}
-
-function getBookingIcon(booking: any, date: Date): string {
-  if (booking.eventType === 'start') {
-    return 'mdi-circle-outline'
-  } else if (booking.eventType === 'end') {
-    return 'mdi-circle-slice-8'
-  } else {
-    return 'mdi-circle-outline'
-  }
-}
-</script>
-
-<style scoped>
-.calendar-grid {
-  width: 100%;
-}
-
-.calendar-day-col {
-  border-right: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-
-.calendar-day-col:last-child {
-  border-right: none;
-}
-
-.calendar-day-card {
-  border-radius: 0 !important;
-  transition: all 0.2s ease;
-}
-
-.calendar-day-card:hover {
-  background-color: rgba(var(--v-theme-primary), 0.04);
-}
-
-.calendar-day-card.today {
-  border-color: rgb(var(--v-theme-primary));
-  border-width: 2px;
-}
-
-.calendar-day-card.has-bookings {
-  background-color: rgba(var(--v-theme-primary), 0.02);
-}
-
-.day-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.day-name {
-  text-transform: uppercase;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-
-.day-number {
-  line-height: 1;
-}
-
-.bookings-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.booking-chip {
-  font-size: 1rem !important;
-  height: 20px !important;
-  max-width: 100%;
-}
-
-.week-navigation {
-  padding: 8px 0;
-}
-
-@media (max-width: 768px) {
-  .calendar-day-card {
-    border-radius: 8px !important;
-    margin-bottom: 8px;
-  }
-  
-  .bookings-list {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-  
-  .booking-chip {
-    font-size: 0.75rem !important;
-    height: 20px !important;
-  }
-}
-</style> 
+</script> 
