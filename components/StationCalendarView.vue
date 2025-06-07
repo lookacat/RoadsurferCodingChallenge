@@ -50,6 +50,23 @@
               </v-btn>
             </div>
             
+            <!-- Week Selection Dropdown -->
+            <div class="week-selector d-flex justify-center mb-3">
+              <v-select
+                v-model="selectedWeekOption"
+                :items="weekOptions"
+                item-title="label"
+                item-value="value"
+                variant="outlined"
+                density="compact"
+                hide-details
+                label="Select Week"
+                style="width: 300px;"
+                :disabled="stationsStore.loading"
+                @update:model-value="onWeekSelect"
+              ></v-select>
+            </div>
+            
             <!-- Week Navigation -->
             <div class="week-navigation d-flex justify-space-between align-center">
               <v-btn
@@ -177,6 +194,7 @@ const { mobile } = useDisplay()
 const isMobile = computed(() => mobile.value)
 const currentWeekStart = ref(getStartOfWeek(new Date()))
 const currentYear = ref(new Date().getFullYear())
+const selectedWeekOption = ref<string>('')
 const availableYears = computed(() => {
   const currentYearValue = new Date().getFullYear()
   const years = []
@@ -186,10 +204,57 @@ const availableYears = computed(() => {
   return years
 })
 
+const weekOptions = computed(() => {
+  const weeks = []
+  const yearStart = new Date(currentYear.value, 0, 1)
+  const yearEnd = new Date(currentYear.value, 11, 31)
+  
+  // Find the first Monday of the year
+  let currentWeek = getStartOfWeek(yearStart)
+  
+  // If the first week starts in the previous year, start from the next week
+  if (currentWeek.getFullYear() < currentYear.value) {
+    currentWeek = new Date(currentWeek)
+    currentWeek.setDate(currentWeek.getDate() + 7)
+  }
+  
+  while (currentWeek <= yearEnd) {
+    const weekEnd = new Date(currentWeek)
+    weekEnd.setDate(currentWeek.getDate() + 6)
+    
+    // Only include weeks that have at least some days in the current year
+    if (weekEnd.getFullYear() >= currentYear.value) {
+      const eventCount = getEventCountForWeek(currentWeek)
+      const weekRangeText = formatWeekRange(currentWeek)
+      const weekLabel = `${weekRangeText} (${eventCount} events)`
+      
+      weeks.push({
+        label: weekLabel,
+        value: weekRangeText,
+        weekStartDate: new Date(currentWeek),
+        eventCount: eventCount
+      })
+    }
+    // Move to next week
+    currentWeek.setDate(currentWeek.getDate() + 7)
+  }
+  
+  return weeks
+})
+
 watch(currentYear, (newYear) => {
   const newDate = new Date(currentWeekStart.value)
   newDate.setFullYear(newYear)
   currentWeekStart.value = getStartOfWeek(newDate)
+  selectedWeekOption.value = formatWeekRange(currentWeekStart.value)
+})
+
+watch(currentWeekStart, (newWeek) => {
+  selectedWeekOption.value = formatWeekRange(newWeek)
+})
+
+onMounted(() => {
+  selectedWeekOption.value = formatWeekRange(currentWeekStart.value)
 })
 
 // Year navigation
@@ -199,6 +264,19 @@ function previousYear() {
 
 function nextYear() {
   currentYear.value += 1
+}
+
+function onWeekSelect(weekValue: string) {
+  if (weekValue) {
+    const selectedWeek = weekOptions.value.find(week => week.value === weekValue)
+    if (selectedWeek) {
+      currentWeekStart.value = new Date(selectedWeek.weekStartDate)
+      // Update year if selected week is in a different year
+      if (selectedWeek.weekStartDate.getFullYear() !== currentYear.value) {
+        currentYear.value = selectedWeek.weekStartDate.getFullYear()
+      }
+    }
+  }
 }
 
 // Week navigation
@@ -215,10 +293,25 @@ function nextWeek() {
   const newDate = new Date(currentWeekStart.value)
   newDate.setDate(newDate.getDate() + 7)
   currentWeekStart.value = newDate
-  // Update year if week crosses year boundary
   if (newDate.getFullYear() !== currentYear.value) {
     currentYear.value = newDate.getFullYear()
   }
+}
+
+function getEventCountForWeek(weekStart: Date): number {
+  if (!stationsStore.selectedStation?.bookings) return 0
+  
+  let totalEvents = 0
+  const weekEnd = new Date(weekStart)
+  weekEnd.setDate(weekStart.getDate() + 6)
+  
+  for (let i = 0; i < 7; i++) {
+    const currentDay = new Date(weekStart)
+    currentDay.setDate(weekStart.getDate() + i)
+    totalEvents += getBookingEventsForDate(currentDay).length
+  }
+  
+  return totalEvents
 }
 
 function getStartOfWeek(date: Date): Date {
