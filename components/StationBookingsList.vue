@@ -16,7 +16,7 @@
             {{ stationsStore.selectedStation.bookingsCount }} bookings
           </v-chip>
         </v-card-subtitle>
-        
+
         <v-card-text>
           <v-data-table
             :headers="responsiveHeaders"
@@ -30,13 +30,13 @@
                 {{ formatDate(item.startDate) }}
               </v-chip>
             </template>
-            
+
             <template v-slot:item.endDate="{ item }">
               <v-chip color="warning" size="small">
                 {{ formatDate(item.endDate) }}
               </v-chip>
             </template>
-            
+
             <template v-slot:item.customerName="{ item }">
               <div class="d-flex align-center">
                 <v-avatar size="32" color="primary" class="mr-3">
@@ -49,7 +49,7 @@
         </v-card-text>
       </v-card>
     </div>
-    
+
     <v-alert
       v-else-if="!stationsStore.selectedStation && !stationsStore.loading"
       type="info"
@@ -58,7 +58,7 @@
     >
       Please select a station to view its bookings
     </v-alert>
-    
+
     <v-alert
       v-if="stationsStore.error"
       type="error"
@@ -71,63 +71,63 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from "vuetify";
 
-const stationsStore = useStationsStore()
-const { mobile } = useDisplay()
+const stationsStore = useStationsStore();
+const { mobile } = useDisplay();
 
 const allHeaders = [
   {
-    title: 'Booking ID',
-    align: 'start' as const,
+    title: "Booking ID",
+    align: "start" as const,
     sortable: true,
-    key: 'id',
+    key: "id",
   },
   {
-    title: 'Customer Name',
-    key: 'customerName',
-    sortable: true,
-  },
-  {
-    title: 'Start Date',
-    key: 'startDate',
+    title: "Customer Name",
+    key: "customerName",
     sortable: true,
   },
   {
-    title: 'End Date',
-    key: 'endDate',
+    title: "Start Date",
+    key: "startDate",
     sortable: true,
   },
-]
+  {
+    title: "End Date",
+    key: "endDate",
+    sortable: true,
+  },
+];
 
 const mobileHeaders = [
   {
-    title: 'Customer Name',
-    key: 'customerName',
+    title: "Customer Name",
+    key: "customerName",
     sortable: true,
   },
   {
-    title: 'Start Date',
-    key: 'startDate',
+    title: "Start Date",
+    key: "startDate",
     sortable: true,
   },
   {
-    title: 'End Date',
-    key: 'endDate',
+    title: "End Date",
+    key: "endDate",
     sortable: true,
   },
-]
+];
 
 const responsiveHeaders = computed(() => {
-  return mobile.value ? mobileHeaders : allHeaders
-})
+  return mobile.value ? mobileHeaders : allHeaders;
+});
 
 function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 </script>
 
@@ -146,11 +146,11 @@ function formatDate(dateString: string): string {
   .v-chip {
     font-size: 0.75rem;
   }
-  
+
   .v-avatar {
     width: 28px !important;
     height: 28px !important;
     font-size: 0.75rem;
   }
 }
-</style> 
+</style>

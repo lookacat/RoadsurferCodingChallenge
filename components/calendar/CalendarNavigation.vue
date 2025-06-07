@@ -10,7 +10,7 @@
       >
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
-      
+
       <v-select
         :model-value="currentYear"
         @update:model-value="$emit('update:current-year', $event)"
@@ -18,10 +18,10 @@
         variant="outlined"
         density="compact"
         hide-details
-        style="width: 120px; margin: 0 8px;"
+        style="width: 120px; margin: 0 8px"
         :disabled="loading"
       ></v-select>
-      
+
       <v-btn
         @click="$emit('next-year')"
         variant="text"
@@ -31,9 +31,17 @@
         <v-icon>mdi-chevron-right</v-icon>
       </v-btn>
     </div>
-    
+
     <!-- Week Selection Dropdown -->
-    <div class="week-selector d-flex justify-center mb-3">
+    <div class="week-selector d-flex justify-center align-center mb-3">
+      <v-btn
+        @click="$emit('previous-week')"
+        variant="text"
+        size="small"
+        :disabled="loading"
+      >
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
       <v-select
         :model-value="selectedWeekOption"
         @update:model-value="$emit('week-select', $event)"
@@ -44,69 +52,59 @@
         density="compact"
         hide-details
         label="Select Week"
-        style="width: 300px;"
+        style="width: 120px; margin: 0 8px"
         :disabled="loading"
       ></v-select>
-    </div>
-    
-    <!-- Week Navigation -->
-    <div class="week-navigation d-flex justify-space-between align-center">
       <v-btn
-        @click="$emit('previous-week')"
-        variant="outlined"
+        @click="$emit('next-week')"
+        variant="text"
         size="small"
         :disabled="loading"
       >
-        <v-icon start>mdi-chevron-left</v-icon>
-        Previous
+        <v-icon>mdi-chevron-right</v-icon>
       </v-btn>
-      
+    </div>
+
+    <!-- Week Navigation -->
+    <div
+      class="week-navigation d-flex justify-center align-center align-center"
+    >
       <div class="text-h6 text-center">
         {{ weekRangeText }}
       </div>
-      
-      <v-btn
-        @click="$emit('next-week')"
-        variant="outlined"
-        size="small"
-        :disabled="loading"
-      >
-        Next
-        <v-icon end>mdi-chevron-right</v-icon>
-      </v-btn>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 interface WeekOption {
-  label: string
-  value: string
-  weekStartDate: Date
-  eventCount: number
+  label: string;
+  value: string;
+  weekStartDate: Date;
+  eventCount: number;
 }
 
 defineProps<{
-  currentYear: number
-  availableYears: number[]
-  selectedWeekOption: string
-  weekOptions: WeekOption[]
-  weekRangeText: string
-  loading: boolean
-}>()
+  currentYear: number;
+  availableYears: number[];
+  selectedWeekOption: string;
+  weekOptions: WeekOption[];
+  weekRangeText: string;
+  loading: boolean;
+}>();
 
 defineEmits<{
-  'previous-year': []
-  'next-year': []
-  'update:current-year': [year: number]
-  'previous-week': []
-  'next-week': []
-  'week-select': [weekValue: string]
-}>()
+  "previous-year": [];
+  "next-year": [];
+  "update:current-year": [year: number];
+  "previous-week": [];
+  "next-week": [];
+  "week-select": [weekValue: string];
+}>();
 </script>
 
 <style scoped>
 .week-navigation {
   padding: 8px 0;
 }
-</style> 
+</style>
