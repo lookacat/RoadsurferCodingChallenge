@@ -1,49 +1,42 @@
 <template>
-  <v-card
-    variant="outlined"
+  <div
     :class="[
-      'calendar-day-card',
+      'calendar-day',
       { 'today': isToday },
       { 'has-bookings': dayData.bookings.length > 0 }
     ]"
-    :height="isMobile ? 'auto' : '120'"
   >
-    <v-card-title class="pa-2 text-center">
-      <div class="day-header">
-        <div class="day-name text-caption text-medium-emphasis">
-          {{ dayData.dayName }}
-        </div>
-        <div class="day-number text-h6" :class="{ 'text-primary': isToday }">
-          {{ dayData.dayNumber }}
-        </div>
+    <div class="day-header">
+      <div class="day-name">
+        {{ dayData.dayName }}
       </div>
-    </v-card-title>
+      <div class="day-number" :class="{ 'today-number': isToday }">
+        {{ dayData.dayNumber }}
+      </div>
+    </div>
     
-    <v-card-text class="pa-2" style="min-height: 60px;">
+    <div class="bookings-content">
       <div v-if="dayData.bookings.length > 0" class="bookings-list">
         <BookingChip
           v-for="booking in visibleBookings"
           :key="`${booking.id}-${booking.eventType}`"
           :booking="booking"
-          :size="isMobile ? 'default' : 'large'"
+          :size="isMobile ? 'small' : 'default'"
         />
         
-        <v-chip
+        <div
           v-if="hasMoreBookings"
-          size="x-small"
-          color="info"
-          variant="outlined"
-          class="mb-1"
+          class="more-bookings"
         >
           +{{ remainingBookingsCount }} more
-        </v-chip>
+        </div>
       </div>
       
-      <div v-else class="text-center text-caption text-medium-emphasis">
-        No bookings
+      <div v-else class="no-bookings">
+        <!-- Empty state, no text needed for clean look -->
       </div>
-    </v-card-text>
-  </v-card>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -75,7 +68,7 @@ const isToday = computed(() => {
   return props.dayData.date.toDateString() === today.toDateString()
 })
 
-const maxVisibleBookings = computed(() => props.isMobile ? 5 : 2)
+const maxVisibleBookings = computed(() => props.isMobile ? 3 : 2)
 
 const visibleBookings = computed(() => 
   props.dayData.bookings.slice(0, maxVisibleBookings.value)
@@ -91,56 +84,116 @@ const remainingBookingsCount = computed(() =>
 </script>
 
 <style scoped>
-.calendar-day-card {
-  border-radius: 0 !important;
-  transition: all 0.2s ease;
+.calendar-day {
+  height: 100%;
+  min-height: 120px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  position: relative;
 }
 
-.calendar-day-card:hover {
-  background-color: rgba(var(--v-theme-primary), 0.04);
+.calendar-day.today {
+  background-color: rgba(25, 118, 210, 0.04);
 }
 
-.calendar-day-card.today {
-  border-color: rgb(var(--v-theme-primary));
-  border-width: 2px;
+.calendar-day.has-bookings {
+  background-color: rgba(25, 118, 210, 0.02);
 }
 
-.calendar-day-card.has-bookings {
-  background-color: rgba(var(--v-theme-primary), 0.02);
+.calendar-day.today.has-bookings {
+  background-color: rgba(25, 118, 210, 0.06);
 }
 
 .day-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .day-name {
-  text-transform: uppercase;
+  font-size: 0.75rem;
   font-weight: 500;
+  text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: #666;
+  margin-bottom: 2px;
 }
 
 .day-number {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
   line-height: 1;
+}
+
+.day-number.today-number {
+  color: #1976d2;
+  background-color: #1976d2;
+  color: white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.bookings-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .bookings-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+}
+
+.more-bookings {
+  font-size: 0.75rem;
+  color: #666;
+  text-align: center;
+  margin-top: 4px;
+  padding: 2px 6px;
+  background-color: rgba(0, 0, 0, 0.04);
+  border-radius: 12px;
+  align-self: center;
+}
+
+.no-bookings {
+  flex: 1;
 }
 
 @media (max-width: 768px) {
-  .calendar-day-card {
-    border-radius: 8px !important;
-    margin-bottom: 8px;
+  .calendar-day {
+    min-height: 80px;
+    padding: 12px;
+    border-radius: 0;
   }
   
   .bookings-list {
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .day-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .day-number.today-number {
+    width: 24px;
+    height: 24px;
+    font-size: 0.875rem;
   }
 }
 </style> 
