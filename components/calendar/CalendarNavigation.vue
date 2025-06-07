@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation-container mb-4">
+  <div class="navigation-container mb-4 mt-4">
     <!-- Year Selection -->
     <div class="year-navigation d-flex justify-center align-center mb-3">
       <v-btn
@@ -17,6 +17,7 @@
         :items="availableYears"
         variant="outlined"
         density="compact"
+        label="Select Year"
         hide-details
         style="width: 120px; margin: 0 8px"
         :disabled="loading"

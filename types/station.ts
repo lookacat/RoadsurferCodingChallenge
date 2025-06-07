@@ -20,4 +20,4 @@ export interface Station {
   location: string;
   bookings: Booking[];
   bookingsCount: number;
-} 
+}
