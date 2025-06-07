@@ -4,7 +4,7 @@
       <v-row>
         <v-col cols="12">
           <h1 class="text-center mb-1">
-            <b style="color: #6bbbae">Roadsurfer</b> Coding Challange
+            <b style="color: #6bbbae">Roadsurfer</b> Coding Challenge
           </h1>
           <h4 class="text-center mb-9 text-grey-darken-1">Paul Neubauer</h4>
           <StationAutocomplete class="mb-9" />
@@ -22,6 +22,14 @@
 
 <script setup lang="ts">
 const viewMode = ref<"list" | "calendar">("calendar");
+const stationsStore = useStationsStore();
+
+onMounted(() => {
+  // TODO: Remove, test code
+  stationsStore.fetchBooking("1", "1").then(() => {
+    console.log(stationsStore.selectedBooking);
+  });
+});
 </script>
 
 <style scoped>
