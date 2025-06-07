@@ -94,7 +94,7 @@ const selectStation = (station: Station) => {
 }
 
 .autocomplete-input:focus {
-  border-color: #4CAF50;
+  border-color: #6bbbae;
 }
 
 .loading {

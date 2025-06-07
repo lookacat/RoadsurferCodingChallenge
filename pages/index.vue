@@ -4,39 +4,13 @@
       <v-row>
         <v-col cols="12">
           <h1 class="text-center mb-6">Stations List</h1>
-          
           <StationAutocomplete />
-          <v-card class="mb-4" variant="outlined">
-            <v-card-text class="d-flex align-center justify-center">
-              <v-btn-toggle
-                v-model="viewMode"
-                mandatory
-                color="primary"
-                variant="outlined"
-                divided
-              >
-                <v-btn 
-                  value="list"
-                  size="large"
-                  :variant="viewMode === 'list' ? 'flat' : 'outlined'"
-                >
-                  <v-icon start>mdi-format-list-bulleted</v-icon>
-                  List
-                </v-btn>
-                <v-btn 
-                  value="calendar"
-                  size="large"
-                  :variant="viewMode === 'calendar' ? 'flat' : 'outlined'"
-                >
-                  <v-icon start>mdi-calendar</v-icon>
-                  Calendar
-                </v-btn>
-              </v-btn-toggle>
-            </v-card-text>
-          </v-card>
-          
-          <StationBookingsList v-show="viewMode === 'list'" />
-          <StationCalendarView v-show="viewMode === 'calendar'" />
+          <!-- Content container that connects to the tabs -->
+          <ViewModeToggle v-model="viewMode" />
+          <div class="content-container">
+            <StationCalendarView v-show="viewMode === 'calendar'" />
+            <StationBookingsList v-show="viewMode === 'list'" />
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -44,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-const viewMode = ref<'list' | 'calendar'>('list')
+const viewMode = ref<"list" | "calendar">("calendar");
 </script>
 
 <style scoped>
@@ -57,4 +31,20 @@ const viewMode = ref<'list' | 'calendar'>('list')
 h1 {
   color: #333;
 }
-</style> 
+
+.content-container {
+  background: white;
+  border-radius: 8px;
+  border-top-left-radius: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+  margin-top: -2px;
+}
+
+/* Remove the default card styling from content components */
+.content-container :deep(.v-card) {
+  box-shadow: none !important;
+  border: none !important;
+}
+</style>
