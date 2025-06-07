@@ -3,8 +3,11 @@
     <v-container>
       <v-row>
         <v-col cols="12">
-          <h1 class="text-center mb-6">Stations List</h1>
-          <StationAutocomplete />
+          <h1 class="text-center mb-1">
+            <b style="color: #6bbbae">Roadsurfer</b> Coding Challange
+          </h1>
+          <h4 class="text-center mb-9 text-grey-darken-1">Paul Neubauer</h4>
+          <StationAutocomplete class="mb-9" />
           <!-- Content container that connects to the tabs -->
           <ViewModeToggle v-model="viewMode" />
           <div class="content-container">

@@ -21,7 +21,7 @@
           <v-data-table
             :headers="responsiveHeaders"
             :items="stationsStore.selectedStation.bookings"
-            :items-per-page="10"
+            :items-per-page="50"
             class="elevation-1"
             mobile-breakpoint="md"
           >

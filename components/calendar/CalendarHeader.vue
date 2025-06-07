@@ -1,7 +1,7 @@
 <template>
   <v-card-title class="d-flex align-center">
-    <v-icon class="mr-2">mdi-calendar</v-icon>
-    {{ station.name }} - Calendar View
+    <v-icon class="mr-2">mdi-map-marker</v-icon>
+    {{ station.name }}
   </v-card-title>
   <v-card-subtitle>
     <v-chip color="primary" variant="tonal" class="mr-2">
@@ -17,12 +17,12 @@
 
 <script setup lang="ts">
 interface Station {
-  name: string
-  location: string
-  bookingsCount: number
+  name: string;
+  location: string;
+  bookingsCount: number;
 }
 
 defineProps<{
-  station: Station
-}>()
-</script> 
+  station: Station;
+}>();
+</script>
