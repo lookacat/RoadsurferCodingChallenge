@@ -65,7 +65,6 @@
       variant="tonal"
       class="mt-4"
     >
-      <v-icon start>mdi-alert-circle</v-icon>
       {{ stationsStore.error }}
     </v-alert>
   </v-container>
