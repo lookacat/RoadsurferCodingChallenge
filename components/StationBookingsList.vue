@@ -7,10 +7,6 @@
           {{ stationsStore.selectedStation.name }}
         </v-card-title>
         <v-card-subtitle>
-          <v-chip color="primary" variant="tonal" class="mr-2">
-            <v-icon start>mdi-map-marker-outline</v-icon>
-            {{ stationsStore.selectedStation.location }}
-          </v-chip>
           <v-chip color="success" variant="tonal">
             <v-icon start>mdi-calendar-check</v-icon>
             {{ stationsStore.selectedStation.bookingsCount }} bookings
