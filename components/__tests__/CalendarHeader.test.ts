@@ -27,27 +27,6 @@ describe("CalendarHeader.vue", () => {
   const mountComponent = (station: Station = mockStation) => {
     return mount(CalendarHeader, {
       props: { station },
-      global: {
-        stubs: {
-          "v-card-title": {
-            template:
-              '<div class="v-card-title-stub" :class="$attrs.class"><slot /></div>',
-          },
-          "v-card-subtitle": {
-            template: '<div class="v-card-subtitle-stub"><slot /></div>',
-          },
-          "v-icon": {
-            template:
-              '<span class="v-icon-stub">{{ $attrs.icon || $slots.default?.[0] }}</span>',
-            props: ["start"],
-          },
-          "v-chip": {
-            template:
-              '<div class="v-chip-stub" :color="color" :variant="variant" :class="$attrs.class"><slot /></div>',
-            props: ["color", "variant"],
-          },
-        },
-      },
     });
   };
 

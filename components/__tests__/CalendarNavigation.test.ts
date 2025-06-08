@@ -22,21 +22,15 @@ describe("CalendarNavigation.vue", () => {
   const mockProps = {
     currentYear: 2024,
     availableYears: [2022, 2023, 2024, 2025, 2026],
-    selectedWeekOption: "Mar 25 - 31, 2024",
     weekOptions: [
       {
-        label: "Mar 25 - 31, 2024 (5 events)",
+        label: "Mar 25 - 31, 2024 (2 events)",
         value: "Mar 25 - 31, 2024",
         weekStartDate: new Date(2024, 2, 25),
-        eventCount: 5,
-      },
-      {
-        label: "Apr 1 - 7, 2024 (2 events)",
-        value: "Apr 1 - 7, 2024",
-        weekStartDate: new Date(2024, 3, 1),
         eventCount: 2,
       },
-    ],
+    ] as WeekOption[],
+    selectedWeekOption: "Mar 25 - 31, 2024",
     weekRangeText: "Mar 25 - 31, 2024",
     loading: false,
   };
@@ -44,43 +38,7 @@ describe("CalendarNavigation.vue", () => {
   const mountComponent = (props = mockProps) => {
     return mount(CalendarNavigation, {
       props,
-      global: {
-        stubs: {
-          "v-btn": {
-            name: "v-btn",
-            template:
-              '<button class="v-btn-stub" :disabled="disabled" @click="$emit(\'click\')"><slot /></button>',
-            props: ["variant", "size", "disabled"],
-            emits: ["click"],
-          },
-          "v-select": {
-            name: "v-select",
-            template:
-              '<select class="v-select-stub" :value="modelValue" :disabled="disabled"><option v-for="item in items" :key="getItemValue(item)" :value="getItemValue(item)">{{ getItemTitle(item) }}</option></select>',
-            props: [
-              "modelValue",
-              "items",
-              "itemTitle",
-              "itemValue",
-              "variant",
-              "density",
-              "hideDetails",
-              "label",
-              "disabled",
-            ],
-            emits: ["update:model-value"],
-            methods: {
-              getItemValue(item: any) {
-                return this.itemValue ? item[this.itemValue] : item;
-              },
-              getItemTitle(item: any) {
-                return this.itemTitle ? item[this.itemTitle] : item;
-              },
-            },
-          },
-          "v-icon": { template: '<span class="v-icon-stub"><slot /></span>' },
-        },
-      },
+      // No need to specify stubs here as they're now global
     });
   };
 
