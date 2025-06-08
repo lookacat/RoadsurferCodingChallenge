@@ -35,7 +35,12 @@ onMounted(() => {
   });
 });
 </script>
-
+<style>
+/* Global overwrite border radius for all fields */
+.v-field {
+  border-radius: 8px !important;
+}
+</style>
 <style scoped>
 .container {
   max-width: 1200px;
@@ -64,9 +69,9 @@ h1 {
 
 @media (max-width: 768px) {
   .content-container {
-    border-radius: 0;
-    margin-left: 0;
-    margin-right: 0;
+    border-radius: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
 
