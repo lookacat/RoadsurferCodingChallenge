@@ -51,8 +51,9 @@ describe("CalendarGrid.vue", () => {
           CalendarDayCard: {
             name: "CalendarDayCard",
             template:
-              '<div class="calendar-day-card-stub">{{ dayData.dayName }} {{ dayData.dayNumber }}</div>',
+              "<div class=\"calendar-day-card-stub\" @click=\"$emit('booking-click', { id: 'test-booking' })\">{{ dayData.dayName }} {{ dayData.dayNumber }}</div>",
             props: ["dayData", "isMobile"],
+            emits: ["booking-click"],
           },
         },
       },
@@ -138,6 +139,20 @@ describe("CalendarGrid.vue", () => {
       expect(dayCards[0].props("isMobile")).toBe(true);
       expect(dayCards[1].props("dayData")).toEqual(weekDays[1]);
       expect(dayCards[1].props("isMobile")).toBe(true);
+    });
+  });
+
+  describe("Booking Click Events", () => {
+    test("should emit booking-click event when CalendarDayCard emits it", async () => {
+      wrapper = mountComponent();
+
+      const firstDayCard = wrapper.find(".calendar-day-card-stub");
+      await firstDayCard.trigger("click");
+
+      expect(wrapper.emitted("booking-click")).toBeTruthy();
+      expect(wrapper.emitted("booking-click")![0]).toEqual([
+        { id: "test-booking" },
+      ]);
     });
   });
 

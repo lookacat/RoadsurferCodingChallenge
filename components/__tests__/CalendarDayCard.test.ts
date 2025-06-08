@@ -60,8 +60,14 @@ describe("CalendarDayCard.vue", () => {
         stubs: {
           BookingChip: {
             template:
-              '<div class="booking-chip-stub">{{ booking.displayText }}</div>',
+              '<div class="booking-chip-stub" @click="handleClick">{{ booking.displayText }}</div>',
             props: ["booking", "size"],
+            emits: ["booking-click"],
+            methods: {
+              handleClick() {
+                this.$emit("booking-click", this.booking);
+              },
+            },
           },
         },
       },
@@ -170,6 +176,27 @@ describe("CalendarDayCard.vue", () => {
       expect(wrapper.props("dayData")).toEqual(dayData);
       expect(wrapper.props("isMobile")).toBe(true);
       expect(wrapper.vm.maxVisibleBookings.value).toBe(3); // Mobile shows 3
+    });
+  });
+
+  describe("Booking Click Events", () => {
+    test("should emit booking-click event when BookingChip is clicked", async () => {
+      const dayData = createDayData("2024-03-26T00:00:00Z", 2);
+      wrapper = mountComponent(dayData);
+
+      const firstBookingChip = wrapper.find(".booking-chip-stub");
+      await firstBookingChip.trigger("click");
+
+      expect(wrapper.emitted("booking-click")).toBeTruthy();
+      expect(wrapper.emitted("booking-click")).toHaveLength(1);
+    });
+
+    test("should not emit events when no bookings exist", () => {
+      const dayData = createDayData("2024-03-26T00:00:00Z", 0);
+      wrapper = mountComponent(dayData);
+
+      expect(wrapper.findAll(".booking-chip-stub")).toHaveLength(0);
+      expect(wrapper.emitted("booking-click")).toBeFalsy();
     });
   });
 

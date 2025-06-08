@@ -145,6 +145,25 @@ describe("BookingChip.vue", () => {
     });
   });
 
+  describe("Click Events", () => {
+    test("should emit booking-click event when clicked", async () => {
+      wrapper = mountComponent(mockStartBooking);
+
+      await wrapper.trigger("click");
+
+      expect(wrapper.emitted("booking-click")).toBeTruthy();
+      expect(wrapper.emitted("booking-click")![0]).toEqual([mockStartBooking]);
+    });
+
+    test("should emit different booking data for different bookings", async () => {
+      wrapper = mountComponent(mockEndBooking);
+
+      await wrapper.trigger("click");
+
+      expect(wrapper.emitted("booking-click")![0]).toEqual([mockEndBooking]);
+    });
+  });
+
   describe("Edge Cases", () => {
     test.each([
       ["empty text", ""],
