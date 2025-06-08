@@ -4,9 +4,13 @@
 
 !! not hosted on GitHub Pages cause it has Nuxt.js API endpoints, so please run local !!
 
+<div align="center">
 <img src="screenshot1.png" alt="Application Screenshot 1" width="600"/>
+</div>
 
-<img src="screenshot2.png" alt="Application Screenshot 2" width="600"/>
+<div align="center">
+<img src="screenshot2.png" alt="Application Screenshot 2" width="300"/>
+</div>
 
 ---
 
