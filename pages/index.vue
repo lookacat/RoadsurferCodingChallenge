@@ -1,13 +1,15 @@
 <template>
   <div class="container">
-    <v-container>
+    <v-container :class="{ 'px-0': $vuetify.display.mobile }">
       <v-row>
-        <v-col cols="12">
-          <h1 class="text-center mb-1">
-            <b style="color: #6bbbae">Roadsurfer</b> Coding Challenge
-          </h1>
-          <h4 class="text-center mb-9 text-grey-darken-1">Paul Neubauer</h4>
-          <StationAutocomplete class="mb-9" />
+        <v-col cols="12" :class="{ 'px-0': $vuetify.display.mobile }">
+          <div :class="{ 'px-4': $vuetify.display.mobile }">
+            <h1 class="text-center mb-1">
+              <b style="color: #6bbbae">Roadsurfer</b> Coding Challenge
+            </h1>
+            <h4 class="text-center mb-9 text-grey-darken-1">Paul Neubauer</h4>
+            <StationAutocomplete class="mb-9" />
+          </div>
           <!-- Content container that connects to the tabs -->
           <div class="content-and-toggle">
             <ViewModeToggle v-model="viewMode" />
@@ -41,6 +43,13 @@ onMounted(() => {
   padding: 20px;
 }
 
+@media (max-width: 768px) {
+  .container {
+    max-width: none;
+    padding: 10px 0;
+  }
+}
+
 h1 {
   color: #333;
 }
@@ -53,6 +62,14 @@ h1 {
   margin-top: -2px;
 }
 
+@media (max-width: 768px) {
+  .content-container {
+    border-radius: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
 /* Remove the default card styling from content components */
 .content-container :deep(.v-card) {
   box-shadow: none !important;
@@ -61,5 +78,12 @@ h1 {
 
 .content-and-toggle {
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+@media (max-width: 768px) {
+  .content-and-toggle {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 </style>
