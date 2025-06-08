@@ -9,10 +9,12 @@
           <h4 class="text-center mb-9 text-grey-darken-1">Paul Neubauer</h4>
           <StationAutocomplete class="mb-9" />
           <!-- Content container that connects to the tabs -->
-          <ViewModeToggle v-model="viewMode" />
-          <div class="content-container">
-            <StationCalendarView v-show="viewMode === 'calendar'" />
-            <StationBookingsList v-show="viewMode === 'list'" />
+          <div class="content-and-toggle">
+            <ViewModeToggle v-model="viewMode" />
+            <div class="content-container">
+              <StationCalendarView v-show="viewMode === 'calendar'" />
+              <StationBookingsList v-show="viewMode === 'list'" />
+            </div>
           </div>
         </v-col>
       </v-row>
@@ -46,8 +48,6 @@ h1 {
 .content-container {
   background: white;
   border-radius: 8px;
-  border-top-left-radius: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 1;
   margin-top: -2px;
@@ -57,5 +57,9 @@ h1 {
 .content-container :deep(.v-card) {
   box-shadow: none !important;
   border: none !important;
+}
+
+.content-and-toggle {
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
 }
 </style>

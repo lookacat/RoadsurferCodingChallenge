@@ -22,7 +22,7 @@
             :headers="responsiveHeaders"
             :items="stationsStore.selectedStation.bookings"
             :items-per-page="50"
-            class="elevation-1"
+            class="elevation-0"
             mobile-breakpoint="md"
           >
             <template v-slot:item.startDate="{ item }">
