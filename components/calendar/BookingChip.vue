@@ -19,22 +19,15 @@
 </template>
 
 <script setup lang="ts">
-interface Booking {
-  id: string;
-  eventType: "start" | "end";
-  displayText: string;
-  startDate: string;
-  endDate: string;
-  customerName: string;
-}
+import type { DayBooking } from "~/types/station";
 
 const props = defineProps<{
-  booking: Booking;
+  booking: DayBooking;
   size?: "x-small" | "small" | "default" | "large" | "x-large";
 }>();
 
 const emit = defineEmits<{
-  "booking-click": [booking: Booking];
+  "booking-click": [booking: DayBooking];
 }>();
 
 const handleClick = () => {

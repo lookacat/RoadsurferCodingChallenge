@@ -21,13 +21,7 @@
 
 <script setup lang="ts">
 import CalendarDayCard from "./CalendarDayCard.vue";
-
-interface DayData {
-  date: Date;
-  dayName: string;
-  dayNumber: number;
-  bookings: any[];
-}
+import type { DayData, DayBooking } from "~/types/station";
 
 defineProps<{
   weekDays: DayData[];
@@ -35,10 +29,10 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  "booking-click": [booking: any];
+  "booking-click": [booking: DayBooking];
 }>();
 
-const handleBookingClick = (booking: any) => {
+const handleBookingClick = (booking: DayBooking) => {
   emit("booking-click", booking);
 };
 </script>
@@ -75,11 +69,9 @@ const handleBookingClick = (booking: any) => {
   border-bottom: 1px solid #e0e0e0;
   margin-bottom: 0;
 }
-
 .calendar-day-col.mobile-day:last-child {
   border-bottom: none;
 }
-
 @media (max-width: 768px) {
   .calendar-container {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);

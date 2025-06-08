@@ -8,20 +8,12 @@ import {
 } from "@jest/globals";
 import { mount, VueWrapper } from "@vue/test-utils";
 import BookingChip from "../calendar/BookingChip.vue";
-
-interface Booking {
-  id: string;
-  eventType: "start" | "end";
-  displayText: string;
-  startDate: string;
-  endDate: string;
-  customerName: string;
-}
+import type { DayBooking } from "~/types/station";
 
 describe("BookingChip.vue", () => {
   let wrapper: VueWrapper<any>;
 
-  const mockStartBooking: Booking = {
+  const mockStartBooking: DayBooking = {
     id: "booking-1",
     eventType: "start",
     displayText: "John Doe started",
@@ -30,7 +22,7 @@ describe("BookingChip.vue", () => {
     customerName: "John Doe",
   };
 
-  const mockEndBooking: Booking = {
+  const mockEndBooking: DayBooking = {
     id: "booking-2",
     eventType: "end",
     displayText: "Jane Smith ended",
@@ -39,7 +31,7 @@ describe("BookingChip.vue", () => {
     customerName: "Jane Smith",
   };
 
-  const mountComponent = (booking: Booking, size?: string) => {
+  const mountComponent = (booking: DayBooking, size?: string) => {
     const props: any = { booking };
     if (size) props.size = size;
 

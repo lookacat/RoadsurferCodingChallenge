@@ -2,8 +2,7 @@
   <div
     :class="[
       'calendar-day',
-      { today: isToday },
-      { 'has-bookings': dayData.bookings.length > 0 },
+      { today: isToday, 'has-bookings': dayData.bookings.length > 0 },
     ]"
   >
     <div class="day-header">
@@ -39,22 +38,7 @@
 
 <script setup lang="ts">
 import BookingChip from "./BookingChip.vue";
-
-interface DayBooking {
-  id: string;
-  eventType: "start" | "end";
-  displayText: string;
-  startDate: string;
-  endDate: string;
-  customerName: string;
-}
-
-interface DayData {
-  date: Date;
-  dayName: string;
-  dayNumber: number;
-  bookings: DayBooking[];
-}
+import type { DayBooking, DayData } from "~/types/station";
 
 const props = defineProps<{
   dayData: DayData;

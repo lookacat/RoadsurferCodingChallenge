@@ -8,13 +8,7 @@ import {
 } from "@jest/globals";
 import { mount, VueWrapper } from "@vue/test-utils";
 import CalendarNavigation from "../calendar/CalendarNavigation.vue";
-
-interface WeekOption {
-  label: string;
-  value: string;
-  weekStartDate: Date;
-  eventCount: number;
-}
+import type { WeekOption } from "~/types/station";
 
 describe("CalendarNavigation.vue", () => {
   let wrapper: VueWrapper<any>;
@@ -38,7 +32,6 @@ describe("CalendarNavigation.vue", () => {
   const mountComponent = (props = mockProps) => {
     return mount(CalendarNavigation, {
       props,
-      // No need to specify stubs here as they're now global
     });
   };
 

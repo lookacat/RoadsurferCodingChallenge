@@ -26,14 +26,6 @@
 
 <script setup lang="ts">
 const viewMode = ref<"list" | "calendar">("calendar");
-const stationsStore = useStationsStore();
-
-onMounted(() => {
-  // TODO: Remove, test code
-  stationsStore.fetchBooking("1", "1").then(() => {
-    console.log(stationsStore.selectedBooking);
-  });
-});
 </script>
 <style>
 /* Global overwrite border radius for all fields */

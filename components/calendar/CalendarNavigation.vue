@@ -78,12 +78,7 @@
 </template>
 
 <script setup lang="ts">
-interface WeekOption {
-  label: string;
-  value: string;
-  weekStartDate: Date;
-  eventCount: number;
-}
+import type { WeekOption } from "~/types/station";
 
 defineProps<{
   currentYear: number;

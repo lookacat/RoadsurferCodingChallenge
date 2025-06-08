@@ -8,20 +8,17 @@ import {
 } from "@jest/globals";
 import { mount, VueWrapper } from "@vue/test-utils";
 import CalendarHeader from "../calendar/CalendarHeader.vue";
-
-interface Station {
-  name: string;
-  location: string;
-  bookingsCount: number;
-}
+import type { Station } from "~/types/station";
 
 describe("CalendarHeader.vue", () => {
   let wrapper: VueWrapper<any>;
 
   const mockStation: Station = {
+    id: "1",
     name: "Berlin Central Station",
     location: "Berlin, Germany",
     bookingsCount: 25,
+    bookings: [],
   };
 
   const mountComponent = (station: Station = mockStation) => {
@@ -80,7 +77,13 @@ describe("CalendarHeader.vue", () => {
     ])(
       "should handle different station data: %s",
       (name, location, bookingsCount) => {
-        const station = { name, location, bookingsCount };
+        const station = {
+          id: "test-id",
+          name,
+          location,
+          bookingsCount,
+          bookings: [],
+        };
         wrapper = mountComponent(station);
 
         expect(wrapper.text()).toContain(name);
@@ -112,9 +115,11 @@ describe("CalendarHeader.vue", () => {
 
     test("should handle empty strings gracefully", () => {
       const stationWithEmptyStrings = {
+        id: "empty-test",
         name: "",
         location: "",
         bookingsCount: 5,
+        bookings: [],
       };
       wrapper = mountComponent(stationWithEmptyStrings);
 

@@ -12,11 +12,7 @@
 </template>
 
 <script setup lang="ts">
-interface Station {
-  name: string;
-  location: string;
-  bookingsCount: number;
-}
+import type { Station } from "~/types/station";
 
 defineProps<{
   station: Station;
