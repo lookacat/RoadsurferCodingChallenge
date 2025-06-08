@@ -2,8 +2,8 @@
   <div
     :class="[
       'calendar-day',
-      { 'today': isToday },
-      { 'has-bookings': dayData.bookings.length > 0 }
+      { today: isToday },
+      { 'has-bookings': dayData.bookings.length > 0 },
     ]"
   >
     <div class="day-header">
@@ -14,7 +14,7 @@
         {{ dayData.dayNumber }}
       </div>
     </div>
-    
+
     <div class="bookings-content">
       <div v-if="dayData.bookings.length > 0" class="bookings-list">
         <BookingChip
@@ -22,16 +22,14 @@
           :key="`${booking.id}-${booking.eventType}`"
           :booking="booking"
           :size="isMobile ? 'small' : 'default'"
+          @booking-click="handleBookingClick"
         />
-        
-        <div
-          v-if="hasMoreBookings"
-          class="more-bookings"
-        >
+
+        <div v-if="hasMoreBookings" class="more-bookings">
           +{{ remainingBookingsCount }} more
         </div>
       </div>
-      
+
       <div v-else class="no-bookings">
         <!-- Empty state, no text needed for clean look -->
       </div>
@@ -40,47 +38,55 @@
 </template>
 
 <script setup lang="ts">
-import BookingChip from './BookingChip.vue'
+import BookingChip from "./BookingChip.vue";
 
 interface DayBooking {
-  id: string
-  eventType: 'start' | 'end'
-  displayText: string
-  startDate: string
-  endDate: string
-  customerName: string
+  id: string;
+  eventType: "start" | "end";
+  displayText: string;
+  startDate: string;
+  endDate: string;
+  customerName: string;
 }
 
 interface DayData {
-  date: Date
-  dayName: string
-  dayNumber: number
-  bookings: DayBooking[]
+  date: Date;
+  dayName: string;
+  dayNumber: number;
+  bookings: DayBooking[];
 }
 
 const props = defineProps<{
-  dayData: DayData
-  isMobile: boolean
-}>()
+  dayData: DayData;
+  isMobile: boolean;
+}>();
+
+const emit = defineEmits<{
+  "booking-click": [booking: DayBooking];
+}>();
+
+const handleBookingClick = (booking: DayBooking) => {
+  emit("booking-click", booking);
+};
 
 const isToday = computed(() => {
-  const today = new Date()
-  return props.dayData.date.toDateString() === today.toDateString()
-})
+  const today = new Date();
+  return props.dayData.date.toDateString() === today.toDateString();
+});
 
-const maxVisibleBookings = computed(() => props.isMobile ? 3 : 2)
+const maxVisibleBookings = computed(() => (props.isMobile ? 3 : 2));
 
-const visibleBookings = computed(() => 
+const visibleBookings = computed(() =>
   props.dayData.bookings.slice(0, maxVisibleBookings.value)
-)
+);
 
-const hasMoreBookings = computed(() => 
-  props.dayData.bookings.length > maxVisibleBookings.value
-)
+const hasMoreBookings = computed(
+  () => props.dayData.bookings.length > maxVisibleBookings.value
+);
 
-const remainingBookingsCount = computed(() => 
-  props.dayData.bookings.length - maxVisibleBookings.value
-)
+const remainingBookingsCount = computed(
+  () => props.dayData.bookings.length - maxVisibleBookings.value
+);
 </script>
 
 <style scoped>
@@ -176,24 +182,24 @@ const remainingBookingsCount = computed(() =>
     padding: 12px;
     border-radius: 0;
   }
-  
+
   .bookings-list {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 4px;
   }
-  
+
   .day-header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
   }
-  
+
   .day-number.today-number {
     width: 24px;
     height: 24px;
     font-size: 0.875rem;
   }
 }
-</style> 
+</style>

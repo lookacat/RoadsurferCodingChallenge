@@ -6,14 +6,12 @@
           v-for="(day, index) in weekDays"
           :key="index"
           :cols="isMobile ? '12' : undefined"
-          :class="[
-            'calendar-day-col',
-            { 'mobile-day': isMobile }
-          ]"
+          :class="['calendar-day-col', { 'mobile-day': isMobile }]"
         >
-          <CalendarDayCard 
+          <CalendarDayCard
             :day-data="day"
             :is-mobile="isMobile"
+            @booking-click="handleBookingClick"
           />
         </v-col>
       </v-row>
@@ -22,19 +20,27 @@
 </template>
 
 <script setup lang="ts">
-import CalendarDayCard from './CalendarDayCard.vue'
+import CalendarDayCard from "./CalendarDayCard.vue";
 
 interface DayData {
-  date: Date
-  dayName: string
-  dayNumber: number
-  bookings: any[]
+  date: Date;
+  dayName: string;
+  dayNumber: number;
+  bookings: any[];
 }
 
 defineProps<{
-  weekDays: DayData[]
-  isMobile: boolean
-}>()
+  weekDays: DayData[];
+  isMobile: boolean;
+}>();
+
+const emit = defineEmits<{
+  "booking-click": [booking: any];
+}>();
+
+const handleBookingClick = (booking: any) => {
+  emit("booking-click", booking);
+};
 </script>
 
 <style scoped>
@@ -78,9 +84,9 @@ defineProps<{
   .calendar-container {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   }
-  
+
   .calendar-row {
     min-height: auto;
   }
 }
-</style> 
+</style>

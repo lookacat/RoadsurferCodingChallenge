@@ -3,14 +3,16 @@
     :class="[
       'booking-chip',
       `booking-chip--${chipColor}`,
-      { [`booking-chip--${size}`]: size }
+      { [`booking-chip--${size}`]: size },
     ]"
+    @click="handleClick"
+    role="button"
+    tabindex="0"
+    @keydown.enter="handleClick"
+    @keydown.space="handleClick"
   >
     <div class="booking-chip__icon">
-      <v-icon 
-        :icon="chipIcon"
-        size="12"
-      ></v-icon>
+      <v-icon :icon="chipIcon" size="12"></v-icon>
     </div>
     <span class="booking-chip__text">{{ booking.displayText }}</span>
   </div>
@@ -18,38 +20,46 @@
 
 <script setup lang="ts">
 interface Booking {
-  id: string
-  eventType: 'start' | 'end'
-  displayText: string
-  startDate: string
-  endDate: string
-  customerName: string
+  id: string;
+  eventType: "start" | "end";
+  displayText: string;
+  startDate: string;
+  endDate: string;
+  customerName: string;
 }
 
 const props = defineProps<{
-  booking: Booking
-  size?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
-}>()
+  booking: Booking;
+  size?: "x-small" | "small" | "default" | "large" | "x-large";
+}>();
+
+const emit = defineEmits<{
+  "booking-click": [booking: Booking];
+}>();
+
+const handleClick = () => {
+  emit("booking-click", props.booking);
+};
 
 const chipColor = computed(() => {
-  if (props.booking.eventType === 'start') {
-    return 'primary'
-  } else if (props.booking.eventType === 'end') {
-    return 'success'
+  if (props.booking.eventType === "start") {
+    return "primary";
+  } else if (props.booking.eventType === "end") {
+    return "success";
   } else {
-    return 'info'
+    return "info";
   }
-})
+});
 
 const chipIcon = computed(() => {
-  if (props.booking.eventType === 'start') {
-    return 'mdi-circle-outline'
-  } else if (props.booking.eventType === 'end') {
-    return 'mdi-circle-slice-8'
+  if (props.booking.eventType === "start") {
+    return "mdi-circle-outline";
+  } else if (props.booking.eventType === "end") {
+    return "mdi-circle-slice-8";
   } else {
-    return 'mdi-circle-outline'
+    return "mdi-circle-outline";
   }
-})
+});
 </script>
 
 <style scoped>
@@ -64,6 +74,18 @@ const chipIcon = computed(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.booking-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.booking-chip:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
 }
 
 .booking-chip__icon {
@@ -121,9 +143,9 @@ const chipIcon = computed(() => {
     font-size: 0.6875rem;
     padding: 3px 6px;
   }
-  
+
   .booking-chip__icon {
     margin-right: 3px;
   }
 }
-</style> 
+</style>
