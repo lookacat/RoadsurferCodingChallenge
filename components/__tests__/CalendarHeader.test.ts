@@ -70,28 +70,20 @@ describe("CalendarHeader.vue", () => {
         "Berlin Central Station"
       );
       expect(wrapper.find(".v-card-subtitle-stub").text()).toContain(
-        "Berlin, Germany"
-      );
-      expect(wrapper.find(".v-card-subtitle-stub").text()).toContain(
         "25 bookings"
       );
     });
 
-    test("should render icons and chips with correct attributes", () => {
+    test("should render booking chip with correct attributes", () => {
       wrapper = mountComponent();
 
       const chips = wrapper.findAll(".v-chip-stub");
-      expect(chips).toHaveLength(2);
-
-      // Location chip
-      expect(chips[0].attributes("color")).toBe("primary");
-      expect(chips[0].attributes("variant")).toBe("tonal");
-      expect(chips[0].text()).toContain("Berlin, Germany");
+      expect(chips).toHaveLength(1);
 
       // Bookings chip
-      expect(chips[1].attributes("color")).toBe("success");
-      expect(chips[1].attributes("variant")).toBe("tonal");
-      expect(chips[1].text()).toContain("25 bookings");
+      expect(chips[0].attributes("color")).toBe("success");
+      expect(chips[0].attributes("variant")).toBe("tonal");
+      expect(chips[0].text()).toContain("25 bookings");
     });
   });
 
@@ -113,7 +105,6 @@ describe("CalendarHeader.vue", () => {
         wrapper = mountComponent(station);
 
         expect(wrapper.text()).toContain(name);
-        expect(wrapper.text()).toContain(location);
         expect(wrapper.text()).toContain(`${bookingsCount} bookings`);
       }
     );
@@ -124,12 +115,11 @@ describe("CalendarHeader.vue", () => {
       wrapper = mountComponent();
 
       const title = wrapper.find(".v-card-title-stub");
-      const subtitle = wrapper.find(".v-card-subtitle-stub");
-      const locationChip = wrapper.findAll(".v-chip-stub")[0];
+      const bookingChip = wrapper.find(".v-chip-stub");
 
       expect(title.classes()).toContain("d-flex");
       expect(title.classes()).toContain("align-center");
-      expect(locationChip.classes()).toContain("mr-2");
+      expect(bookingChip.attributes("color")).toBe("success");
     });
   });
 
