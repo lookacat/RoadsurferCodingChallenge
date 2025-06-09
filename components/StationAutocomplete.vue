@@ -10,12 +10,33 @@
         @focus="showDropdown = true"
         @blur="onBlur"
       />
+      <div class="location-icon">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            stroke="#6bbbae"
+            stroke-width="2"
+            fill="none"
+          />
+          <circle
+            cx="12"
+            cy="9"
+            r="2.5"
+            stroke="#6bbbae"
+            stroke-width="2"
+            fill="none"
+          />
+        </svg>
+      </div>
       <div v-if="stationsStore.loading" class="loading">Loading...</div>
-      
-      <div
-        v-if="showDropdown && filteredStations.length > 0"
-        class="dropdown"
-      >
+
+      <div v-if="showDropdown && filteredStations.length > 0" class="dropdown">
         <div
           v-for="station in filteredStations"
           :key="station.id"
@@ -26,7 +47,7 @@
           <div class="station-info">{{ station.bookingsCount }} bookings</div>
         </div>
       </div>
-      
+
       <div
         v-if="showDropdown && searchTerm && filteredStations.length === 0"
         class="dropdown no-results"
@@ -38,38 +59,38 @@
 </template>
 
 <script setup lang="ts">
-import type { Station } from '~/types/station'
+import type { Station } from "~/types/station";
 
-const stationsStore = useStationsStore()
+const stationsStore = useStationsStore();
 
-const searchTerm = ref('')
-const showDropdown = ref(false)
+const searchTerm = ref("");
+const showDropdown = ref(false);
 
 const filteredStations = computed(() => {
-  return stationsStore.filteredStations(searchTerm.value).slice(0, 5)
-})
+  return stationsStore.filteredStations(searchTerm.value).slice(0, 5);
+});
 
 const onInput = () => {
-  showDropdown.value = true
-  
+  showDropdown.value = true;
+
   // Fetch stations on type
   if (stationsStore.stations.length === 0 && !stationsStore.loading) {
-    stationsStore.fetchAllStations()
+    stationsStore.fetchAllStations();
   }
-}
+};
 
 const onBlur = () => {
   // Hide output after some time to allow for clicks
   setTimeout(() => {
-    showDropdown.value = false
-  }, 200)
-}
+    showDropdown.value = false;
+  }, 200);
+};
 
 const selectStation = (station: Station) => {
-  stationsStore.selectStation(station)
-  searchTerm.value = station.name
-  showDropdown.value = false
-}
+  stationsStore.selectStation(station);
+  searchTerm.value = station.name;
+  showDropdown.value = false;
+};
 </script>
 
 <style scoped>
@@ -85,7 +106,7 @@ const selectStation = (station: Station) => {
 
 .autocomplete-input {
   width: 100%;
-  padding: 12px 16px;
+  padding: 12px 48px 12px 16px;
   border: 2px solid #ddd;
   border-radius: 8px;
   font-size: 16px;
@@ -95,6 +116,17 @@ const selectStation = (station: Station) => {
 
 .autocomplete-input:focus {
   border-color: #6bbbae;
+}
+
+.location-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .loading {
@@ -161,4 +193,4 @@ const selectStation = (station: Station) => {
   font-size: 12px;
   color: #666;
 }
-</style> 
+</style>
