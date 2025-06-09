@@ -1,8 +1,7 @@
 # Coding Challenge
-
 ## Paul Neubauer
 
-!! not hosted on GitHub Pages cause it has Nuxt.js API endpoints, so please run local !!
+https://rscodingchallange.pages.dev/
 
 <div align="center">
 <img src="screenshot1.png" alt="Application Screenshot 1" width="600"/>
@@ -26,6 +25,16 @@ A modern Vue 3/Nuxt 3 application for managing station calendars and bookings
 - 🎯 Clickable booking chips with detailed modal views
 - 🔍 Real-time booking information display
 - 🧪 Comprehensive test coverage (107+ tests)
+
+## Technology Stack
+
+- **Frontend Framework**: Nuxt 3
+- **UI Framework**: Vue 3 with Composition API
+- **UI Components**: Vuetify 3
+- **State Management**: Pinia
+- **Testing**: Jest with Vue Test Utils
+- **Icons**: Material Design Icons
+- **Styling**: SCSS/Sass
 
 ## Setup
 
@@ -95,15 +104,6 @@ Execute the test suite:
 npm run test
 ```
 
-## Technology Stack
-
-- **Frontend Framework**: Nuxt 3
-- **UI Framework**: Vue 3 with Composition API
-- **UI Components**: Vuetify 3
-- **State Management**: Pinia
-- **Testing**: Jest with Vue Test Utils
-- **Icons**: Material Design Icons
-- **Styling**: SCSS/Sass
 
 ## Project Structure
 
