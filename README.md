@@ -1,9 +1,7 @@
 # Coding Challenge
-
 ## Paul Neubauer
 
-!! not hosted on GitHub Pages cause it has Nuxt.js API endpoints, so please run local !!
-You can see how to run it further down the page :)
+https://rscodingchallange.pages.dev/
 
 <div align="center">
 <img src="screenshot1.png" alt="Application Screenshot 1" width="600"/>
