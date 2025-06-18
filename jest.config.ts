@@ -1,56 +1,67 @@
-import type { Config } from 'jest'
+import type { Config } from "jest";
 
 const config: Config = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
+  preset: "ts-jest",
+  testEnvironment: "node",
   projects: [
     {
-      displayName: 'server',
-      testEnvironment: 'node',
-      testMatch: ['<rootDir>/server/**/*.test.ts'],
+      displayName: "server",
+      testEnvironment: "node",
+      testMatch: ["<rootDir>/server/**/*.test.ts"],
       transform: {
-        '^.+\\.ts$': 'ts-jest'
+        "^.+\\.ts$": "ts-jest",
       },
       moduleNameMapper: {
-        '^@/(.*)$': '<rootDir>/$1',
-        '^~/(.*)$': '<rootDir>/$1',
-        '^#imports$': '<rootDir>/node_modules/nuxt/dist/app/compat/capi'
-      }
+        "^@/(.*)$": "<rootDir>/$1",
+        "^~/(.*)$": "<rootDir>/$1",
+        "^#imports$": "<rootDir>/node_modules/nuxt/dist/app/compat/capi",
+      },
     },
     {
-      displayName: 'stores',
-      testEnvironment: 'node',
-      testMatch: ['<rootDir>/stores/**/*.test.ts'],
+      displayName: "stores",
+      testEnvironment: "node",
+      testMatch: ["<rootDir>/stores/**/*.test.ts"],
       transform: {
-        '^.+\\.ts$': 'ts-jest'
+        "^.+\\.ts$": "ts-jest",
       },
       moduleNameMapper: {
-        '^@/(.*)$': '<rootDir>/$1',
-        '^~/(.*)$': '<rootDir>/$1',
-        '^#imports$': '<rootDir>/node_modules/nuxt/dist/app/compat/capi'
-      }
+        "^@/(.*)$": "<rootDir>/$1",
+        "^~/(.*)$": "<rootDir>/$1",
+        "^#imports$": "<rootDir>/node_modules/nuxt/dist/app/compat/capi",
+      },
     },
     {
-      displayName: 'components',
-      testEnvironment: '@happy-dom/jest-environment',
-      testMatch: ['<rootDir>/components/**/*.test.ts'],
+      displayName: "composables",
+      testEnvironment: "node",
+      testMatch: ["<rootDir>/composables/**/*.test.ts"],
       transform: {
-        '^.+\\.ts$': ['ts-jest', { useESM: true }],
-        '^.+\\.vue$': '@vue/vue3-jest'
+        "^.+\\.ts$": "ts-jest",
       },
-      transformIgnorePatterns: [
-        'node_modules/(?!(vuetify|@vue|@mdi)/)'
-      ],
       moduleNameMapper: {
-        '^@/(.*)$': '<rootDir>/$1',
-        '^~/(.*)$': '<rootDir>/$1',
-        '^#imports$': '<rootDir>/node_modules/nuxt/dist/app/compat/capi',
-        '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
+        "^@/(.*)$": "<rootDir>/$1",
+        "^~/(.*)$": "<rootDir>/$1",
+        "^#imports$": "<rootDir>/node_modules/nuxt/dist/app/compat/capi",
       },
-      moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node', 'vue'],
-      setupFilesAfterEnv: ['<rootDir>/jest.setup.components.ts']
-    }
-  ]
-}
+    },
+    {
+      displayName: "components",
+      testEnvironment: "@happy-dom/jest-environment",
+      testMatch: ["<rootDir>/components/**/*.test.ts"],
+      transform: {
+        "^.+\\.ts$": ["ts-jest", { useESM: true }],
+        "^.+\\.vue$": "@vue/vue3-jest",
+      },
+      transformIgnorePatterns: ["node_modules/(?!(vuetify|@vue|@mdi)/)"],
+      moduleNameMapper: {
+        "^@/(.*)$": "<rootDir>/$1",
+        "^~/(.*)$": "<rootDir>/$1",
+        "^#imports$": "<rootDir>/node_modules/nuxt/dist/app/compat/capi",
+        "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+      },
+      moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node", "vue"],
+      setupFilesAfterEnv: ["<rootDir>/jest.setup.components.ts"],
+    },
+  ],
+};
 
-module.exports = config 
+module.exports = config;
